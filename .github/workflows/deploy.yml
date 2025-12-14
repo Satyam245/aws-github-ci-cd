@@ -39,7 +39,7 @@ jobs:
       - name: Upload Glue Script to S3
         run: |
           aws s3 cp glue/scripts/order_etl.py \
-            s3://my-artifact-bucket/glue/scripts/order_etl.py
+            s3://my-artifact-bucket-cicd/glue/scripts/order_etl.py
 
       - name: SAM Build
         run: sam build
