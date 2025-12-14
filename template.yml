@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM + Glue CI/CD Practice Stack
+
+Parameters:
+  Env:
+    Type: String
+  GlueScriptBucket:
+    Type: String
+
+Resources:
+
+  OrderLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub order-processor-${Env}
+      Runtime: python3.10
+      Handler: app.lambda_handler
+      CodeUri: lambda/order_processor/
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Environment:
+        Variables:
+          ENV: !Ref Env
+
+  GlueServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub glue-role-${Env}
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+
+  OrderGlueJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub order-etl-${Env}
+      Role: !GetAtt GlueServiceRole.Arn
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://${GlueScriptBucket}/glue/scripts/order_etl.py
+        PythonVersion: "3"

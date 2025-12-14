@@ -1,0 +1,30 @@
+version = 0.1
+
+
+[dev.deploy.parameters]
+stack_name = "sam-glue-dev"
+region = "us-east-2"
+capabilities = "CAPABILITY_NAMED_IAM"
+resolve_s3 = true
+parameter_overrides = "Env=dev GlueScriptBucket=my-artifact-bucket-cicd"
+confirm_changeset = false
+fail_on_empty_changeset = false
+
+
+[qa.deploy.parameters]
+stack_name = "sam-glue-qa"
+region = "us-east-2"
+capabilities = "CAPABILITY_NAMED_IAM"
+resolve_s3 = true
+parameter_overrides = "Env=qa GlueScriptBucket=my-artifact-bucket-cicd"
+confirm_changeset = false
+fail_on_empty_changeset = false
+
+
+[prod.deploy.parameters]
+stack_name = "sam-glue-prod"
+region = "us-east-2"
+capabilities = "CAPABILITY_NAMED_IAM"
+resolve_s3 = true
+parameter_overrides = "Env=prod GlueScriptBucket=my-artifact-bucket-cicd"
+confirm_changeset = true
