@@ -3,8 +3,6 @@ name: Deploy SAM + Glue (All Envs)
 on:
   push:
     branches:
-      - dev
-      - qa
       - main
 
 jobs:
